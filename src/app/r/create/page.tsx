@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { useCustomToast } from "@/hooks/use-custom-toast";
 import { useToast } from "@/hooks/use-toast";
 import { useCreateSubreddit } from "@/queries/subreddit";
+import { getErrorMessageResponse } from "@/utils/error";
 import { AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -25,13 +26,15 @@ const Page: React.FC<pageProps> = ({}) => {
 		},
 		onError(error) {
 			if (error instanceof AxiosError) {
-				toast({
-					title: `Error when create community`,
-					description: `${
-						error.response?.data[0]?.message || error.response?.data
-					}`,
-					variant: "destructive",
-				});
+				if (error.response?.status === 401) {
+					return loginToast();
+				} else {
+					toast({
+						title: `Error when create community`,
+						description: `${getErrorMessageResponse(error)}`,
+						variant: "destructive",
+					});
+				}
 			} else {
 				toast({
 					title: "Something went wrong",

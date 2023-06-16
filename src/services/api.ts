@@ -1,5 +1,8 @@
 import { toast } from "@/hooks/use-toast";
-import { CreateSubredditPayload } from "@/lib/validators/subreddit";
+import {
+	CreateSubredditPayload,
+	SubscribeToSubredditPayload,
+} from "@/lib/validators/subreddit";
 import axios, { AxiosError } from "axios";
 
 const AXIOS_CONFIG = {
@@ -48,9 +51,22 @@ const create = (baseURL = "/api") => {
 		return api.post("/subreddit", { ...body });
 	};
 
+	const subscribeToSubreddit = (body: SubscribeToSubredditPayload) => {
+		return api.post("/subreddit/subscribe", { ...body });
+	};
+
+	const unsubscribeToSubreddit = (body: SubscribeToSubredditPayload) => {
+		return api.post("/subreddit/unsubscribe", { ...body });
+	};
+
 	return {
 		getRoot,
+
+		// Subreddit
 		createSubreddit,
+		subscribeToSubreddit,
+		unsubscribeToSubreddit,
+		// Subreddit
 	};
 };
 
