@@ -1,4 +1,4 @@
-import SignIn from "@/components/SignIn";
+import SignUp from "@/components/SignUp";
 import React from "react";
 import AuthLayout from "../authLayout";
 interface PageProps {}
@@ -6,7 +6,7 @@ interface PageProps {}
 const Page: React.FC<PageProps> = ({}) => {
 	return (
 		<AuthLayout>
-			<SignIn />
+			<SignUp />
 		</AuthLayout>
 	);
 };
