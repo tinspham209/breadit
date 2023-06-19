@@ -42,6 +42,7 @@
 		"axios": "^1.4.0",
 		"class-variance-authority": "^0.6.0",
 		"cmdk": "^0.2.0",
+		"compressorjs": "^1.2.1",
 		"date-fns": "^2.30.0",
 		"editorjs-react-renderer": "^3.5.1",
 		"eslint": "8.41.0",

@@ -4,8 +4,10 @@ import {
 	getSubscription,
 } from "@/app/actions";
 import SubscribeLeaveToggle from "@/components/SubscribeLeaveToggle";
+import { buttonVariants } from "@/components/ui/Button";
 import { getAuthSession } from "@/lib/auth";
 import { format } from "date-fns";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -73,6 +75,16 @@ const Layout = async ({
 									isSubscribed={isSubscribed}
 								/>
 							)}
+
+							<Link
+								href={`/r/${slug}/submit`}
+								className={buttonVariants({
+									variant: "outline",
+									className: "w-full mb-6",
+								})}
+							>
+								Create Post
+							</Link>
 						</dl>
 					</div>
 				</div>

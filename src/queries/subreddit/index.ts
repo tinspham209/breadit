@@ -4,6 +4,7 @@ import {
 } from "@/lib/validators/subreddit";
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 import apiClient from "../apiClient";
+import { PostCreationRequest } from "@/lib/validators";
 
 export function useCreateSubreddit(
 	options?: UseMutationOptions<any, Error, CreateSubredditPayload>
@@ -67,6 +68,28 @@ export function useUnSubscribeToSubreddit(
 
 	return {
 		unsubscribeToSubreddit,
+		isLoading,
+	};
+}
+
+export function useCreatePostInSubreddit(
+	options?: UseMutationOptions<any, Error, PostCreationRequest>
+) {
+	const { mutate: createPostInSubreddit, isLoading } = useMutation<
+		any,
+		Error,
+		PostCreationRequest
+	>({
+		mutationFn: async (payload: PostCreationRequest) => {
+			const { data } = await apiClient.createPostInSubreddit(payload);
+
+			return data;
+		},
+		...options,
+	});
+
+	return {
+		createPostInSubreddit,
 		isLoading,
 	};
 }

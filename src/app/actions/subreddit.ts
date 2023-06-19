@@ -1,6 +1,13 @@
 import { db } from "@/lib/db";
 import config from "@/utils/config";
 
+export const getSubredditById = async (id: string) => {
+	const subreddit = await db.subreddit.findFirst({
+		where: { name: id },
+	});
+	return subreddit;
+};
+
 export const getSubredditAllContent = async (id: string) => {
 	const subreddit = await db.subreddit.findFirst({
 		where: { name: id },

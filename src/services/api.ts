@@ -1,4 +1,5 @@
 import { toast } from "@/hooks/use-toast";
+import { PostCreationRequest } from "@/lib/validators";
 import {
 	CreateSubredditPayload,
 	SubscribeToSubredditPayload,
@@ -59,6 +60,10 @@ const create = (baseURL = "/api") => {
 		return api.post("/subreddit/unsubscribe", { ...body });
 	};
 
+	const createPostInSubreddit = (body: PostCreationRequest) => {
+		return api.post("/subreddit/post/create", { ...body });
+	};
+
 	return {
 		getRoot,
 
@@ -66,6 +71,7 @@ const create = (baseURL = "/api") => {
 		createSubreddit,
 		subscribeToSubreddit,
 		unsubscribeToSubreddit,
+		createPostInSubreddit,
 		// Subreddit
 	};
 };
