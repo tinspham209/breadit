@@ -78,7 +78,7 @@ const PostFeed: React.FC<PostFeedProps> = ({ initialPosts, subredditName }) => {
 			})}
 			{isFetchingNextPage ? (
 				<div className="flex flex-row justify-center">
-					<Loader2 className="w-8 h-8" />
+					<Loader2 className="w-8 h-8 animate-spin" />
 				</div>
 			) : null}
 		</ul>

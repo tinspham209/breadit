@@ -1,4 +1,6 @@
 import { db } from "@/lib/db";
+import { redis } from "@/lib/redis";
+import { CachedPost } from "@/types/redis";
 import config from "@/utils/config";
 import { getSession } from "next-auth/react";
 
@@ -51,4 +53,27 @@ export const getCustomPost = async () => {
 	});
 
 	return posts;
+};
+
+export const getCachedPostDetail = async (postId: string) => {
+	const cachedPost = (await redis.hgetall(`post:${postId}`)) as CachedPost;
+
+	return cachedPost;
+};
+
+export const getPostDetail = async (
+	postId: string,
+	{ needAuthor = true } = {}
+) => {
+	const post = await db.post.findFirst({
+		where: {
+			id: postId,
+		},
+		include: {
+			votes: true,
+			author: needAuthor,
+		},
+	});
+
+	return post;
 };

@@ -9,7 +9,7 @@ Fullstack Reddit Clone
 - TailwindCSS, radix-ui 
 - Next-Auth
 - Prisma
-- Redis
+- Redis (Upstash)
 - MySQL / PlanetScale
 - React-Query
 - React-Hook-Form
@@ -35,15 +35,24 @@ yarn prisma db push
 - setup new credentials in OAuth2
 - update `GOOGLE_CLIENT_ID` & `GOOGLE_CLIENT_SECRET` in `.env`
 
-3. `NEXTAUTH_SECRET`
+3. Create Upstash/redis ID
+-  create new project in [Upstash](upstash.com) with Redis database 
+-  get 2 key in REST API (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`) of console.upstash.com
+-  update key in `.env`
+```
+REDIS_URL={UPSTASH_REDIS_REST_URL}
+REDIS_SECRET={UPSTASH_REDIS_REST_TOKEN}
+```
+
+4. `NEXTAUTH_SECRET`
 - access to https://generate-secret.vercel.app/32 to get the key
 
-4. Install dependencies
+5. Install dependencies
 ```
 yarn
 ```
 
-5. Run project
+6. Run project
 ```
 yarn dev
 ```
