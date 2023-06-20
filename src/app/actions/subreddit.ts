@@ -19,6 +19,9 @@ export const getSubredditAllContent = async (id: string) => {
 					comments: true,
 					subreddit: true,
 				},
+				orderBy: {
+					createdAt: "desc",
+				},
 				take: config.INFINITE_SCROLLING_PAGINATION_RESULTS,
 			},
 		},

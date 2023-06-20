@@ -1,9 +1,11 @@
 import { toast } from "@/hooks/use-toast";
-import { PostCreationRequest } from "@/lib/validators";
+import { PostCreationRequest, PostVoteRequest } from "@/lib/validators";
 import {
 	CreateSubredditPayload,
 	SubscribeToSubredditPayload,
 } from "@/lib/validators/subreddit";
+import { stringify } from "@/utils/api";
+import config from "@/utils/config";
 import axios, { AxiosError } from "axios";
 
 const AXIOS_CONFIG = {
@@ -64,6 +66,19 @@ const create = (baseURL = "/api") => {
 		return api.post("/subreddit/post/create", { ...body });
 	};
 
+	const getPostFeed = (params: {
+		limit: any;
+		page: any;
+		subredditName?: any;
+	}) => {
+		const queryString = stringify(params);
+		return api.get(`/posts?${queryString}`);
+	};
+
+	const votePost = (body: PostVoteRequest) => {
+		return api.patch(`/subreddit/post/vote`, { ...body });
+	};
+
 	return {
 		getRoot,
 
@@ -72,6 +87,8 @@ const create = (baseURL = "/api") => {
 		subscribeToSubreddit,
 		unsubscribeToSubreddit,
 		createPostInSubreddit,
+		getPostFeed,
+		votePost,
 		// Subreddit
 	};
 };

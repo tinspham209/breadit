@@ -1,5 +1,6 @@
 import { getSubredditAllContent } from "@/app/actions";
 import MiniCreatePost from "@/components/MiniCreatePost";
+import PostFeed from "@/components/PostFeed";
 import { getAuthSession } from "@/lib/auth";
 import { notFound } from "next/navigation";
 
@@ -27,6 +28,7 @@ const Page = async ({ params }: PageProps) => {
 			<MiniCreatePost session={session} />
 
 			{/* TODO: show posts in user feed */}
+			<PostFeed initialPosts={subreddit.posts} subredditName={subreddit.name} />
 		</>
 	);
 };

@@ -2,9 +2,17 @@ import {
 	CreateSubredditPayload,
 	SubscribeToSubredditPayload,
 } from "@/lib/validators/subreddit";
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import {
+	useInfiniteQuery,
+	useMutation,
+	UseMutationOptions,
+	UseQueryOptions,
+} from "@tanstack/react-query";
 import apiClient from "../apiClient";
-import { PostCreationRequest } from "@/lib/validators";
+import { PostCreationRequest, PostVoteRequest } from "@/lib/validators";
+import { useState } from "react";
+import { ExtendedPost, GetPropertiesParams } from "@/types/db";
+import config from "@/utils/config";
 
 export function useCreateSubreddit(
 	options?: UseMutationOptions<any, Error, CreateSubredditPayload>
@@ -90,6 +98,66 @@ export function useCreatePostInSubreddit(
 
 	return {
 		createPostInSubreddit,
+		isLoading,
+	};
+}
+
+export function useGetPostFeed(
+	options: UseQueryOptions<any, Error> & {
+		subredditName: string | undefined | null;
+		initialPosts: ExtendedPost[];
+	}
+) {
+	const { data, isLoading, fetchNextPage, isFetchingNextPage } =
+		useInfiniteQuery(
+			["post-feed-infinite-query"],
+			async ({ pageParam = 1 }) => {
+				const { data } = await apiClient.getPostFeed({
+					limit: config.INFINITE_SCROLLING_PAGINATION_RESULTS,
+					page: pageParam,
+					subredditName: options.subredditName,
+				});
+				return data as ExtendedPost[];
+			},
+			{
+				getNextPageParam: (_, pages) => {
+					return pages.length + 1;
+				},
+				initialData: { pages: [options.initialPosts], pageParams: [1] },
+			}
+		);
+
+	return { data, isLoading, fetchNextPage, isFetchingNextPage };
+}
+
+export function useVotePost(
+	options: UseMutationOptions<
+		any,
+		Error,
+		{ voteType: PostVoteRequest["voteType"] }
+	> & {
+		postId: string;
+	}
+) {
+	const { mutate: vote, isLoading } = useMutation<
+		any,
+		Error,
+		{ voteType: PostVoteRequest["voteType"] }
+	>({
+		mutationFn: async (payload: { voteType: PostVoteRequest["voteType"] }) => {
+			const formatPayload = {
+				postId: options.postId,
+				voteType: payload.voteType,
+			};
+			const { data } = await apiClient.votePost(formatPayload);
+
+			return data;
+		},
+		...options,
+	});
+
+	return {
+		vote,
 		isLoading,
 	};
 }
