@@ -6,7 +6,7 @@ Fullstack Reddit Clone
 ## Tech-stack
 - NextJS 13
 - TypeScript
-- TailwindCSS, radix-ui 
+- TailwindCSS, shadcn/ui
 - Next-Auth
 - Prisma
 - Redis (Upstash)
@@ -15,6 +15,7 @@ Fullstack Reddit Clone
 - React-Hook-Form
 - EditorJS
 - date-fns
+- Vercel
 
 ## Setup
 
@@ -56,3 +57,17 @@ yarn
 ```
 yarn dev
 ```
+
+
+# Preview
+
+<img src="./assets/homepage.png" alt="homepage" width="500"/>
+<br/>
+
+<img src="./assets/subreddit.png" alt="subreddit" width="500"/>
+<br/>
+
+<img src="./assets/create-new-post.png" alt="create-new-post" width="500"/>
+<br/>
+
+<img src="./assets/post-detail.png" alt="post-detail" width="500"/>
