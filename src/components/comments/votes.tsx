@@ -2,24 +2,27 @@
 
 import { useCustomToast } from "@/hooks/use-custom-toast";
 import { usePrevious } from "@mantine/hooks";
-import { VoteType } from "@prisma/client";
+import { CommentVote, VoteType } from "@prisma/client";
 import React from "react";
 import { Button } from "../ui/Button";
-import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useVotePost } from "@/queries/subreddit";
 import { AxiosError } from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { getErrorMessageResponse } from "@/utils/error";
+import { useVoteComment } from "@/queries/comments";
+
+type PartialVote = Pick<CommentVote, "type">;
 
 interface PostVoteClientProps {
-	postId: string;
+	commentId: string;
 	initialVotesAmount: number;
-	initialVote?: VoteType | null;
+	initialVote?: PartialVote;
 }
 
-const PostVoteClient: React.FC<PostVoteClientProps> = ({
-	postId,
+const CommentVotes: React.FC<PostVoteClientProps> = ({
+	commentId,
 	initialVotesAmount,
 	initialVote,
 }) => {
@@ -30,12 +33,8 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 	const [currentVote, setCurrentVote] = React.useState(initialVote);
 	const prevVote = usePrevious(currentVote);
 
-	React.useEffect(() => {
-		setCurrentVote(initialVote);
-	}, [initialVote]);
-
-	const { isLoading, vote } = useVotePost({
-		postId: postId,
+	const { isLoading, vote } = useVoteComment({
+		commentId: commentId,
 		onSuccess(data, variables, context) {},
 		onError(error, variables) {
 			const { voteType } = variables;
@@ -69,7 +68,7 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 		},
 		onMutate(variables) {
 			const { voteType } = variables;
-			if (currentVote === voteType) {
+			if (currentVote?.type === voteType) {
 				setCurrentVote(undefined);
 				if (voteType === "UP") {
 					setVotesAmount((prev) => prev - 1);
@@ -77,7 +76,7 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 					setVotesAmount((prev) => prev + 1);
 				}
 			} else {
-				setCurrentVote(voteType);
+				setCurrentVote({ type: voteType });
 				if (voteType === "UP") {
 					setVotesAmount((prev) => prev + (currentVote ? 2 : 1));
 				} else {
@@ -88,7 +87,7 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 	});
 
 	return (
-		<div className="flex flex-row sm:flex-col gap-2 sm:gap-0 sm:w-20 pb-4 sm:pb-0 pr-3 sm:pr-6">
+		<div className="flex gap-1">
 			<Button
 				onClick={() => {
 					vote({
@@ -102,7 +101,7 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 			>
 				<ArrowBigUp
 					className={cn("h-5 w-5 text-zinc-700", {
-						"text-emerald-500 fill-emerald-500": currentVote === "UP",
+						"text-emerald-500 fill-emerald-500": currentVote?.type === "UP",
 					})}
 				/>
 			</Button>
@@ -124,7 +123,7 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 			>
 				<ArrowBigDown
 					className={cn("h-5 w-5 text-zinc-700", {
-						"text-red-500 fill-red-500": currentVote === "DOWN",
+						"text-red-500 fill-red-500": currentVote?.type === "DOWN",
 					})}
 				/>
 			</Button>
@@ -132,4 +131,4 @@ const PostVoteClient: React.FC<PostVoteClientProps> = ({
 	);
 };
 
-export default PostVoteClient;
+export default CommentVotes;

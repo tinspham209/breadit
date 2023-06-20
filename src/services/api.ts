@@ -1,5 +1,10 @@
 import { toast } from "@/hooks/use-toast";
-import { PostCreationRequest, PostVoteRequest } from "@/lib/validators";
+import {
+	CommentVoteRequest,
+	PostCreationRequest,
+	PostVoteRequest,
+} from "@/lib/validators";
+import { CommentRequest } from "@/lib/validators/comment";
 import {
 	CreateSubredditPayload,
 	SubscribeToSubredditPayload,
@@ -79,6 +84,14 @@ const create = (baseURL = "/api") => {
 		return api.patch(`/subreddit/post/vote`, { ...body });
 	};
 
+	const postComment = (body: CommentRequest) => {
+		return api.patch("subreddit/post/comment", { ...body });
+	};
+
+	const voteComment = (body: CommentVoteRequest) => {
+		return api.patch(`/subreddit/post/comment/vote`, { ...body });
+	};
+
 	return {
 		getRoot,
 
@@ -90,6 +103,10 @@ const create = (baseURL = "/api") => {
 		getPostFeed,
 		votePost,
 		// Subreddit
+
+		// Comment
+		postComment,
+		voteComment,
 	};
 };
 

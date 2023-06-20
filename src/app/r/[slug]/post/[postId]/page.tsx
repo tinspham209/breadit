@@ -1,13 +1,13 @@
 import { getCachedPostDetail, getPostDetail } from "@/app/actions";
+import CommentsSection from "@/components/comments/section";
 import EditorOutput from "@/components/editor/output";
 import PostVoteServer from "@/components/post-vote/server";
 import { buttonVariants } from "@/components/ui/Button";
-import { redis } from "@/lib/redis";
 import { formatTimeToNow } from "@/lib/utils";
 import { Post, User, Vote } from "@prisma/client";
 import { ArrowBigDown, ArrowBigUp, Loader2 } from "lucide-react";
 import { notFound } from "next/navigation";
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
 interface PageProps {
 	params: {
@@ -55,6 +55,15 @@ const Page = async ({ params }: PageProps) => {
 					</h1>
 
 					<EditorOutput content={post?.content ?? cachedPosts?.content} />
+
+					<Suspense
+						fallback={
+							<Loader2 className="h-5 w-5 animate-spin text-zinc-500" />
+						}
+					>
+						{/* @ts-expect-error Server Component */}
+						<CommentsSection postId={post?.id ?? cachedPosts.id} />
+					</Suspense>
 				</div>
 			</div>
 		</div>

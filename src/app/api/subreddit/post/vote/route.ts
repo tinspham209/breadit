@@ -1,5 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
-import { PostVoteValidator } from "./../../../../../lib/validators/vote";
+import { PostVoteValidator } from "@/lib/validators/vote";
 import { db } from "@/lib/db";
 import type { CachedPost } from "@/types/redis";
 import { redis } from "@/lib/redis";
